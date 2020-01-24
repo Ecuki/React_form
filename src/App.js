@@ -2,71 +2,41 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
+const Cash = props => {
+  const cash =
+    props.cash === "" || props.cash === "0"
+      ? "0"
+      : (props.cash / props.ratio).toFixed(2);
+  return (
+    <div>
+      Warość {cash} {props.title === "dollars" ? "$" : "€"}{" "}
+    </div>
+  );
+};
+
 class App extends React.Component {
   state = {
-    name: "",
-    text: "",
-    isDog: true,
-    number: "0"
+    amount: "",
+    ratioDollar: 3.86,
+    ratioEuro: 4.26
   };
+
   handleChange = e => {
-    console.log(e.target.type);
-    if (e.target.type === "checkbox") {
-      this.setState({ [e.target.name]: e.target.checked });
-    } else {
-      this.setState({ [e.target.name]: e.target.value });
-    }
+    this.setState({
+      amount: e.target.value
+    });
   };
   render() {
+    const { amount, ratioDollar, ratioEuro } = this.state;
     return (
-      <>
+      <div className="app">
         <label>
-          Podaj imię
-          <input
-            name="name"
-            type="text"
-            value={this.state.name}
-            onChange={this.handleChange}
-          />
+          <input type="number" value={amount} onChange={this.handleChange} />
         </label>
-        <br />
-        <label>
-          Napisz cośo sobie:
-          <input
-            name="text"
-            type="text"
-            value={this.state.text}
-            onChange={this.handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Masz psa?
-          <input
-            name="isDog"
-            type="checkbox"
-            checked={this.state.isDog}
-            onChange={this.handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Ile masz zwierzaków?
-          <select
-            name="number"
-            value={this.state.number}
-            onChange={this.handleChange}
-          >
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="more">Więcej</option>
-          </select>
-        </label>
-      </>
+        <Cash cash={amount} ratio={ratioDollar} title={"dollars"} />
+        <Cash cash={amount} ratio={ratioEuro} title={"euros"} />
+      </div>
     );
   }
 }
-
 export default App;
