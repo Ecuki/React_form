@@ -9,7 +9,7 @@ const Cash = props => {
       : (props.cash / props.ratio).toFixed(2);
   return (
     <div>
-      Warość {cash} {props.title === "dollars" ? "$" : "€"}{" "}
+      {props.title} {cash}
     </div>
   );
 };
@@ -21,20 +21,47 @@ class App extends React.Component {
     ratioEuro: 4.26
   };
 
+  currencies = [
+    {
+      id: 1,
+      name: "dollar",
+      ratio: 3.86,
+      title: "Wartość w dolarach:"
+    },
+    {
+      id: 2,
+      name: "euro",
+      ratio: 4.26,
+      title: "Wartość w euro:"
+    },
+    {
+      id: 3,
+      name: "pound",
+      ratio: 5.05,
+      title: "Wartość w funtach:"
+    }
+  ];
   handleChange = e => {
     this.setState({
       amount: e.target.value
     });
   };
   render() {
-    const { amount, ratioDollar, ratioEuro } = this.state;
+    const { amount } = this.state;
+    const calculators = this.currencies.map(currency => (
+      <Cash
+        key={currency.id}
+        ratio={currency.ratio}
+        title={currency.title}
+        cash={amount}
+      />
+    ));
     return (
       <div className="app">
         <label>
           <input type="number" value={amount} onChange={this.handleChange} />
         </label>
-        <Cash cash={amount} ratio={ratioDollar} title={"dollars"} />
-        <Cash cash={amount} ratio={ratioEuro} title={"euros"} />
+        {calculators}
       </div>
     );
   }
